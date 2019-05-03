@@ -10,6 +10,11 @@
 #   Do not attempt to run this script if the ELK services are running (or be
 #   prepared to reap zombie processes).
 
+if [ `id -u` -ne 0 ]; then
+    echo "You need root privileges to run this script(try sudo)"
+    exit 1
+fi
+
 
 ## handle termination gracefully
 
@@ -64,7 +69,7 @@ if [ "$ELASTICSEARCH_START" -ne "1" ]; then
   echo "ELASTICSEARCH_START is set to something different from 1, not starting..."
 else
   # update permissions of ES data directory
-  chown -R elasticsearch:elasticsearch /var/lib/elasticsearch
+  chown -R user:user  /var/lib/elasticsearch
 
   # override ES_HEAP_SIZE variable if set
   if [ ! -z "$ES_HEAP_SIZE" ]; then
@@ -99,7 +104,7 @@ else
         && chmod +x /etc/init.d/elasticsearch
   fi
 
-  service elasticsearch start
+   service elasticsearch start
 
   # wait for Elasticsearch to start up before either starting Kibana (if enabled)
   # or attempting to stream its log file

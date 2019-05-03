@@ -27,8 +27,8 @@ fi
 name=logstash
 pidfile="/var/run/$name.pid"
 
-LS_USER=logstash
-LS_GROUP=logstash
+LS_USER=user
+LS_GROUP=user
 LS_HOME=
 LS_HEAP_SIZE="500m"
 LS_JAVA_OPTS="-Djava.io.tmpdir=${LS_HOME}"
