@@ -1,5 +1,5 @@
 # Dockerfile for ELK stack
-# Elasticsearch, Logstash, Kibana 6.7.0
+# Elasticsearch, Logstash, Kibana 5.6.16
 
 # Build with:
 # docker build -t <repo-user>/elk .
@@ -7,32 +7,27 @@
 # Run with:
 # docker run -p 8000:8000 -p 9200:9200 -p 5044:5044 -it --name elk elk
 
-FROM ubuntu:16.04
+FROM gcr.io/che-fullstack/rba-base:latest
 
 
 ###############################################################################
 #                                INSTALLATION
 ###############################################################################
 
-### install prerequisites (cURL, gosu, JDK, tzdata)
+### install prerequisites (cURL,  tzdata)
 
-ENV GOSU_VERSION 1.10
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN set -x \
- && apt-get update -qq \
- && apt-get install -qqy --no-install-recommends ca-certificates curl \
- && apt-get install -qqy --no-install-recommends openjdk-8-jdk tzdata sudo\
- && apt-get clean \
+ &&  sudo rm -rf /var/lib/apt/lists/* && sudo apt-get clean \
+ && sudo apt-get update -qq \
+ && sudo apt-get install -qqy --no-install-recommends ca-certificates tzdata \
+ && sudo apt-get clean \
  && set +x
 
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
-
-RUN groupadd -r user && useradd --no-log-init -r -g user user
-RUN echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-USER user 
 
 ENV ELK_VERSION 5.6.16
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
 
 ### install Elasticsearch
 
